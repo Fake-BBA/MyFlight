@@ -39,3 +39,4 @@
 .\objects\dri_uart.o: ..\User\Inc\Queue.h
 .\objects\dri_uart.o: ..\User\Inc\MyTypedef.h
 .\objects\dri_uart.o: C:\software\keil5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\dri_uart.o: C:\software\keil5\ARM\ARMCC\Bin\..\include\string.h

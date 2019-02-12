@@ -49,4 +49,5 @@
 .\objects\stm32f3xx_it.o: ..\Devices\Drivers\Inc\Dri_MS5611.h
 .\objects\stm32f3xx_it.o: ..\Devices\Drivers\Inc\Dri_MPU6050.h
 .\objects\stm32f3xx_it.o: ..\Devices\Drivers\Inc\Dri_HMC5883L.h
+.\objects\stm32f3xx_it.o: ..\Devices\Drivers\Inc\Dri_Uart.h
 .\objects\stm32f3xx_it.o: ..\User\Inc\stm32f3xx_it.h

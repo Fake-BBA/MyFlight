@@ -11,5 +11,6 @@
 #include "Dri_MS5611.h"
 #include "Dri_MPU6050.h"
 #include "Dri_HMC5883L.h"
+#include "Dri_Uart.h"
 
 #endif

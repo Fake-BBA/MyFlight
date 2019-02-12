@@ -51,18 +51,17 @@ void UART1_Init(uint32 BaudRate)
 	USART_ClearFlag(USART1,USART_IT_RXNE);
 	//USART_ITConfig(USART1, USART_IT_IDLE, ENABLE);// 采用空闲中断，目的是在产生空闲中断时，说明接收或者发送已经结束，此时可以读取DMA中的数据了。
 	
-	USART_ClearFlag(USART1,USART_IT_RXNE);	//接收缓冲区不为空中断
-	USART_ClearFlag(USART1, USART_FLAG_TC);	//发送完成中断
-	
-	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
-	USART_ITConfig(USART1, USART_IT_TC, ENABLE);
+		
+	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);	//接收缓冲区不为空中断
+	USART_ITConfig(USART1, USART_IT_TC, ENABLE);	//发送完成中断
 
 
 }
 
 void UART1_SendByte(uint8 byte)
 {
-	USART1->TDR = (byte & (uint16_t)0x01FF);	
+	USART1->TDR = (byte & (uint16_t)0x01FF);
+	
 }
 
 uint8 UART1_GetByte()

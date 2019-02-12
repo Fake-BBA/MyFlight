@@ -49,4 +49,5 @@
 .\objects\main.o: ..\Devices\Drivers\Inc\Dri_MS5611.h
 .\objects\main.o: ..\Devices\Drivers\Inc\Dri_MPU6050.h
 .\objects\main.o: ..\Devices\Drivers\Inc\Dri_HMC5883L.h
+.\objects\main.o: ..\Devices\Drivers\Inc\Dri_Uart.h
 .\objects\main.o: C:\software\keil5\ARM\ARMCC\Bin\..\include\stdio.h

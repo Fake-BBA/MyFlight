@@ -1,19 +1,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "Devices.h"
 #include "stm32f3xx_it.h"
-  
-/* Private typedef -----------------------------------------------------------*/
-/*extern DMA_HandleTypeDef hdma_i2c1_rx;
-extern DMA_HandleTypeDef hdma_i2c1_tx;
-extern I2C_HandleTypeDef hi2c1;
-extern TIM_HandleTypeDef htim7;
-*/
-
-/* Private define ------------------------------------------------------------*/
-/* Private macro -------------------------------------------------------------*/
-/* Private variables ---------------------------------------------------------*/
-/* Private function prototypes -----------------------------------------------*/
-/* Private functions ---------------------------------------------------------*/
 
 void NMI_Handler(void)
 {
@@ -125,28 +112,31 @@ void USART1_IRQHandler(void)
 {
 	extern Queue Uart1_Tx_Queue;
 	extern Queue Uart1_Rx_Queue;
-	static elementype temp;
-	
+	extern struct UartBuffer uart1_RX_Buffer;
+	extern struct UartBuffer uart1_Tx_Buffer;
 	//接收完成中断
 	if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET) 
 	{
-		USART_ClearITPendingBit(USART1, USART_IT_RXNE); //清接收完成标志位
-		InsertQueue(&Uart1_Rx_Queue,UART1_GetByte());
+		uart1_RX_Buffer.stateFlag=1;
+		uart1_RX_Buffer.buffer[uart1_RX_Buffer.length++]=USART1->RDR;
+		
+		USART_ClearITPendingBit(USART1, USART_IT_RXNE); //清接收完成标志位	
 	}
 	
 	//发送完成中断
 	if(USART_GetITStatus(USART1, USART_IT_TC) != RESET)
 	{   
-		extern uint8 TX_Stop;
-		USART_ClearFlag(USART1, USART_FLAG_TC); //清发送完成标志位
 		
-		if(DeleteQueue(&Uart1_Tx_Queue, &temp)) //如果队列不为空
+		if(uart1_Tx_Buffer.length>0)
 		{
-			UART1_SendByte(temp);
-			TX_Stop=0;
+			uart1_Tx_Buffer.length--;
+			USART1->RDR=uart1_Tx_Buffer.buffer[uart1_Tx_Buffer.length];		
 		}
 		else
-			TX_Stop=1;	//发送停止
+			uart1_Tx_Buffer.stateFlag=0;
+		
+		
+		USART_ClearFlag(USART1, USART_FLAG_TC); //清发送完成标志位		
 	}
 	
 }

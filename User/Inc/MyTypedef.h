@@ -5,6 +5,7 @@
 #define FALSE	0
 
 typedef unsigned char bool;
+typedef unsigned char BOOL;
 
 typedef unsigned char uint8;
 typedef unsigned short int uint16;
