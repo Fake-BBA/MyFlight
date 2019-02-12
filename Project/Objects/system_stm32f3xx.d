@@ -1,0 +1,9 @@
+.\objects\system_stm32f3xx.o: ..\User\Src\system_stm32f3xx.c
+.\objects\system_stm32f3xx.o: C:\software\keil5\ARM\PACK\Keil\STM32F3xx_DFP\2.1.0\Drivers\CMSIS\Device\ST\STM32F3xx\Include\stm32f3xx.h
+.\objects\system_stm32f3xx.o: C:\software\keil5\ARM\PACK\Keil\STM32F3xx_DFP\2.1.0\Drivers\CMSIS\Device\ST\STM32F3xx\Include\stm32f303xc.h
+.\objects\system_stm32f3xx.o: ..\System\Core\Inc\core_cm4.h
+.\objects\system_stm32f3xx.o: C:\software\keil5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\system_stm32f3xx.o: ..\System\Core\Inc\core_cmInstr.h
+.\objects\system_stm32f3xx.o: ..\System\Core\Inc\core_cmFunc.h
+.\objects\system_stm32f3xx.o: ..\System\Core\Inc\core_cmSimd.h
+.\objects\system_stm32f3xx.o: C:\software\keil5\ARM\PACK\Keil\STM32F3xx_DFP\2.1.0\Drivers\CMSIS\Device\ST\STM32F3xx\Include\system_stm32f3xx.h
