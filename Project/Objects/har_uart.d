@@ -37,3 +37,5 @@
 .\objects\har_uart.o: ..\User\Inc\MyTypedef.h
 .\objects\har_uart.o: ..\User\Inc\Queue.h
 .\objects\har_uart.o: ..\User\Inc\MyTypedef.h
+.\objects\har_uart.o: C:\software\keil5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\har_uart.o: C:\software\keil5\ARM\ARMCC\Bin\..\include\string.h

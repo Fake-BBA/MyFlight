@@ -107,36 +107,64 @@ void I2C1_ER_IRQHandler(void)
 	
 }
 
+typedef enum _UartEvent_
+{
+   E_uart_0 = 0,// 没有事件
+   E_uart_tc=0x40,                  //发送完成
+   E_uart_idle=0x80,               //接收完成
+}UartEvent;
+u16 receivelen = 0;// 声明接收数据长度
+UartEvent event;//申明一个事件参数
+ 
+//清除DMA 缓存，并终止DMA
+void Uart_Dma_Clr(void)
+{
+    DMA_Cmd(DMA1_Channel4, DISABLE);
+    DMA1_Channel4->CNDTR=0;
+    DMA_Cmd(DMA1_Channel5, DISABLE);
+    DMA1_Channel5->CNDTR=1024 ;
+    DMA_Cmd(DMA1_Channel5, ENABLE);
+}
+// 获取一个事件，事件分为发送完成事件和接收完成事件，可以根据事件进行进行处理
+UartEvent Uart_Get_Event(void)
+{
+  UartEvent e;
+  if(!DMA1_Channel5->CNDTR) Uart_Dma_Clr();// 如果产生一个事件后，接收数据通道已经没有了缓存空间，进行清除DMA清空
+  return event;
+}
+
+void Uart_Set_Event(UartEvent event_in)
+{
+	
+}
+// 清除对应的事件
+void Uart_Clr_Event(UartEvent event_in)
+{
+    event&=~event_in;
+}
 
 void USART1_IRQHandler(void)
 {
-	extern Queue Uart1_Tx_Queue;
-	extern Queue Uart1_Rx_Queue;
 	extern struct UartBuffer uart1_RX_Buffer;
-	extern struct UartBuffer uart1_Tx_Buffer;
-	//接收完成中断
-	if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET) 
-	{
-		uart1_RX_Buffer.stateFlag=1;
-		uart1_RX_Buffer.buffer[uart1_RX_Buffer.length++]=USART1->RDR;
-		
-		USART_ClearITPendingBit(USART1, USART_IT_RXNE); //清接收完成标志位	
-	}
+	extern struct UartBuffer uart1_TX_Buffer;
 	
-	//发送完成中断
-	if(USART_GetITStatus(USART1, USART_IT_TC) != RESET)
-	{   
+	if(USART_GetITStatus(USART1,USART_IT_IDLE)!= RESET)
+	{
+		u8 tem=USART1->RDR;	//读寄存器，清空
+		uart1_RX_Buffer.length =UART1_MAX_BUFF_SIZE-DMA1_Channel5->CNDTR;// 总的buf长度减去剩余buf长度，得到接收到数据的长度
 		
-		if(uart1_Tx_Buffer.length>0)
-		{
-			uart1_Tx_Buffer.length--;
-			USART1->RDR=uart1_Tx_Buffer.buffer[uart1_Tx_Buffer.length];		
-		}
-		else
-			uart1_Tx_Buffer.stateFlag=0;
+		if(uart1_RX_Buffer.stateFlag==RECV_FREE)
+			uart1_RX_Buffer.startTime=GetSystemTime();
 		
-		
-		USART_ClearFlag(USART1, USART_FLAG_TC); //清发送完成标志位		
+		uart1_RX_Buffer.stateFlag=RECV_COMPLETE;	//接收完成
+		USART_ClearITPendingBit(USART1, USART_IT_IDLE);	
+	} 
+
+	if(USART_GetITStatus(USART1,USART_IT_TC)!= RESET) // 全部数据发送完成，产生该标记**
+	{
+		USART_ClearITPendingBit(USART1, USART_IT_TC);   // 清除完成标记
+		DMA_Cmd(DMA1_Channel4, DISABLE); // 关闭DMA
+		uart1_TX_Buffer.stateFlag=SEND_COMPLETE;     //设置发送完成事件
 	}
 	
 }
